@@ -1,0 +1,182 @@
+\documentclass[10pt]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{color}
+\usepackage[normalem]{ ulem }
+\usepackage{soul}
+\usetheme{Darmstadt}
+
+\title{Les projets ATM2 et SAVOIE}
+\subtitle{Formation à destination du superviseur}
+\author{Clovis HAMEL, Lo\"{i}c PERRIN, Michael AMAND}
+\date{\today}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Plan}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+% Let's get started
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+\include{Introduction.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ATM2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cf. Cours de Mickael Papail
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{SAVOIE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Qu'est ce que SAVOIE ?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{SAVOIE bien ou quoi ?}
+\begin{block}{SAVOIE}
+\begin{itemize}
+\item Solution d’Architecture Virtuelle pour l’Opérationnel, Innovante et Évolutive
+\item Solution all-in-one d'hébergement à la sauce OVH, AWS
+\item Solution locale désignée par l'équipe projet CRNA/N ATM2
+\end{itemize}
+\end{block}
+\begin{block}{Forces de l'infrastructure}
+\begin{itemize}
+\item Cluster de machines \pause
+\item Virtualisation des applicatifs \pause
+\item Stockage partagé sur SAN \pause 
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{center}
+\begin{frame}{Schéma d'infrastructure SAVOIE}
+\includegraphics[width=200px]{Schemas/SAVOIE.png}
+\end{frame}
+\end{center}
+
+\subsection{La virtualisation}
+
+
+
+\include{FctVMWare.tex}
+
+\begin{frame}{Isolation des flux}
+\begin{block}{Quatre VLAN tagués sont utilisés}
+\begin{itemize}
+\item GESTION pour administrer les ESX et les SAN via un poste d'administration (LATANIA)
+\item vMOTION pour la migration des VM d'un ESX à un autre
+\item STOCKAGE pour les lectures et écritures sur le SAN
+\item SYSTEME sur lequel les VM applicatives serveurs communiquent avec les clients physiques
+\end{itemize}
+\end{block}
+\begin{block}{Pourquoi isoler les flux ?}
+\begin{itemize}
+    \item Préconisation de l'ANSSI
+    \item Allocation de ressources indépendantes et dédiées.
+\end{itemize}
+\end{block}
+\begin{exampleblock}{Exemple}
+Un VLAN GESTION a besoin de beaucoup moins de ressources qu'un VLAN STOCKAGE
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Vu de l'ESX}
+\includegraphics[width=300px]{Schemas/VLAN.png}
+\end{frame}
+
+%%%%% A faire
+%\begin{frame}{Vu du SAN}
+%\includegraphics[width=300px]{VLAN.png}
+%\end{frame}
+
+
+
+\begin{center}
+\begin{frame}{Maquettage de la baie SAVOIE}
+\includegraphics[width=250px]{Schemas/Maquettage_Savoie.jpg}
+\end{frame}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Maintenance Opérationnelle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Qui assure la MO de ATM2 et SAVOIE ?}
+\begin{block}{Une MO répartie sur deux superviseurs}
+\begin{itemize}
+\item Les superviseurs RVU (resp CAW) utilisent leur casquette ODR (resp WAN) pour superviser le réseau ATM2
+\item Les superviseurs RVU (resp CAW) utilisent leur casquette ODA (resp CAU) pour superviser SAVOIE
+\end{itemize}
+\end{block}
+\begin{alertblock}{Attention}
+\begin{itemize}
+    \item Le réseau ATM2 n'est pas supervisé par la MO en 2018
+    \item Il est supervisé par la MS ODR et WAN conjointement 
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Que doit faire le superviseur ?}
+\begin{block}{Processus en trois temps}
+\begin{itemize}
+\item Identifier
+\item Communiquer
+\item Agir
+\end{itemize}
+\end{block}
+\begin{block}{Outils à la disposition des superviseurs}
+\begin{itemize}
+\item La station d'administration LATANIA
+\item La supervision (??)
+\item SIAM 
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Identifier et Communiquer}
+\begin{block}{Identifier l'incident}
+\begin{itemize}
+\item Identifier une panne de composants réseaux (switch) ou applicatifs (ESX, disque, etc)
+\item Identifier un vMotion réalisé par vSphere (??)
+\end{itemize}
+\end{block}
+\begin{block}{Communiquer}
+\begin{itemize}
+\item Aux utilisateurs et à la MS l'impact et le temps de rétablissement
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Agir}
+\begin{block}{Agir sur une VM}
+\begin{itemize}
+\item Arrêter/Démarrer une VM dégradée ou en panne
+\end{itemize}
+\end{block}
+\begin{block}{Agir sur les ESX}
+\begin{itemize}
+\item \textcolor{red}{Aucun changement d'ESX n'est fait par la MO}
+\end{itemize}
+\end{block}
+\begin{block}{Agir sur les SAN}
+\begin{itemize}
+\item \textcolor{red}{Aucun changement de disque SAN n'est fait par la MO}
+\item \textcolor{red}{Aucun changement de SAN n'est fait par la MO}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\end{document}

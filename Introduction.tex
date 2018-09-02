@@ -1,0 +1,79 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Une prise de conscience nécessaire 1/2}
+\begin{block}{Évolution des architectures applicatives}
+\begin{itemize}
+\item Applications client-serveur légers \pause
+\item Recours aux technologies Web 2.0 (PHP, Javascript, Bootstrap, etc) \pause
+\item Recours aux API (B2B Network Manager par exemple) \pause
+\item Utilisation de technologies de conteneurisation telles que Docker \pause
+\end{itemize}
+\end{block}
+\begin{block}{Évolution des méthodes de développement}
+\begin{itemize}
+\item Mise en retrait de la DTI \pause
+\item Cycle de développement et de déploiement plus courts (cf ASAP, itérativité, etc) \pause
+\item Diminution des RH mais contraintes maintenues \pause
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Une prise de conscience nécessaire 2/2}
+\begin{block}{Evolution des méthodes de gestion de projet}
+\begin{itemize}
+\item Eviter l'effet tunnel en livrant plus souvent \pause
+\item Déployer en continu \pause
+\item Automatiser les tests (cf gitlab) \pause
+\item Conserver une disponibilité maximum (sur panne et sur déploiement) par un retour arrière natif \pause
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Une dette technologique à combler}
+\begin{block}{Un contrôle aérien qui a soif de modernité}
+\begin{itemize}
+    \item Décloisonnement des acteurs du TA (PC, FMP, CDS, Cie, NM, etc) \pause
+    \item Numérisation et automatisation de l'information (\sout{téléphone})
+    \item Une vitrine pour valoriser les compétences internes de la DSNA 
+\end{itemize}
+\end{block} 
+ \begin{exampleblock}{Exemples d'applicatifs}
+ WikiFF, 4Me, SALTO (sur SAVOIE), iStream, CCS (sur leur propre machines)
+\end{exampleblock}
+\begin{block}{Un existant peu optimal}
+\begin{itemize}
+\item Un bi-serveur par application (SIAM, EPEIRES, WikiFF)
+\item Une box Internet par applicatif (iSTREAM, SALTO, etc)
+\item Aucune mutualisation des services (3 applications sur SIAM-TECH, 3 serveurs MySQL)
+\item Chaque section doit se former sur des méthodes de travail similaires 
+\end{itemize}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Les solutions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Une solution en deux temps}
+\begin{block}{Deux salles, deux ambiances, un même plaisir}
+\begin{itemize}
+    \item Une solution nationale : Le réseau ATM2 
+    \item Une solution locale : L'infrastructure SAVOIE
+\end{itemize}
+\end{block} 
+
+\begin{alertblock}{Nécessité de différencier les deux}
+\begin{itemize}
+    \item Pas les mêmes matériels
+    \item Pas les mêmes intervenants nationaux et locaux impliqués
+\end{itemize}
+\end{alertblock} 
+
+\begin{alertblock}{Mais les deux ne sont pas bijectifs ! \#ClassePrepa}
+\begin{itemize}
+    \item SAVOIE nécessite forcément ATM2 a priori ... \footnote{vSphere ne sert pas à virtualiser des clients. On peut le faire si on veut mais ce n'est pas fait pour. Au premier ordre, si on utilise SAVOIE pour implémenter un système, on utilisera ATM2. Si on ne veut pas utiliser ATM2, on utilise une infra indépendante.}
+    \item Mais on peut connecter des systèmes sur ATM2 sans utiliser l'infrastructure SAVOIE. 
+\end{itemize}
+\end{alertblock} 
+\end{frame}
