@@ -3,15 +3,21 @@
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 \usepackage{color}
-\usepackage[normalem]{ ulem }
+\usepackage[normalem]{ulem}
 \usepackage{soul}
 \usetheme{Darmstadt}
 
-\title{Les projets ATM2 et SAVOIE}
-\subtitle{Formation à destination du superviseur}
-\author{Clovis HAMEL, Lo\"{i}c PERRIN, Michael AMAND}
-\date{\today}
+\title{Le projet SAVOIE}
+\subtitle{Formation à destination du superviseur - V0}
+\author{Clovis HAMEL, Loïc PERRIN, Mickaël AMAND}
+\date{T4 2018}
 
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>{Plan}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
 \AtBeginSubsection[]
 {
   \begin{frame}<beamer>{Plan}
@@ -31,78 +37,76 @@
   % You might wish to add the option [pausesections]
 \end{frame}
 
-\include{Introduction.tex}
+\section{Introduction}
+\include{Introduction}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ATM2}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cf. Cours de Mickael Papail
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SAVOIE}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Qu'est ce que SAVOIE ?
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Présentation et architecture}
 
 \begin{frame}{SAVOIE bien ou quoi ?}
+\begin{block}{Equipe projet}
+\begin{itemize}
+\item Chef de projet : S. HEURTIER + G. GUERIZEC 
+\item Ensemble d'agents issus de toutes les subdivisions
+\end{itemize}
+\end{block}
 \begin{block}{SAVOIE}
 \begin{itemize}
-\item Solution d’Architecture Virtuelle pour l’Opérationnel, Innovante et Évolutive
-\item Solution all-in-one d'hébergement à la sauce OVH, AWS
-\item Solution locale désignée par l'équipe projet CRNA/N ATM2
+\item Solution d’Architecture Virtuelle pour l’Opérationnel, Innovante et Évolutive  
+\item Solution all-in-one d'hébergement à la sauce OVH, AWS  
+\item Toponymie orientée autour du domaine skiable 3 vallées  
 \end{itemize}
 \end{block}
 \begin{block}{Forces de l'infrastructure}
 \begin{itemize}
-\item Cluster de machines \pause
+\item Cluster de machines (en mode cattle, escadrille etc) \pause
 \item Virtualisation des applicatifs \pause
-\item Stockage partagé sur SAN \pause 
+\item Stockage partagé sur SAN  
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{center}
-\begin{frame}{Schéma d'infrastructure SAVOIE}
+\begin{frame}{Schéma d'infrastructure SAVOIE (WIP)}
 \includegraphics[width=200px]{Schemas/SAVOIE.png}
 \end{frame}
 \end{center}
 
-\subsection{La virtualisation}
-
-
-
-\include{FctVMWare.tex}
-
-\begin{frame}{Isolation des flux}
-\begin{block}{Quatre VLAN tagués sont utilisés}
+\begin{frame}{Composition matérielle de la plate-forme}
+\begin{block}{Sur le segment OPS}
 \begin{itemize}
-\item GESTION pour administrer les ESX et les SAN via un poste d'administration (LATANIA)
-\item vMOTION pour la migration des VM d'un ESX à un autre
-\item STOCKAGE pour les lectures et écritures sur le SAN
-\item SYSTEME sur lequel les VM applicatives serveurs communiquent avec les clients physiques
+\item 4 ESX : lesmenuires.ops, valthorens.ops, meribel.ops et courchevel.ops
+\item 2 SAN : lachambre.ops et saulire.ops
+\item 1 station d'administration : latania.ops
+\end{itemize}
+\end{block}\pause
+\begin{block}{Sur le segment PREOPS}
+\begin{itemize}
+\item 3 ESX : valthorens.preops, meribel.preops et courchevel.preops
+\item 2 SAN : lachambre.preops et saulire.preops
+\item 1 station d'administration : latania.preops
 \end{itemize}
 \end{block}
-\begin{block}{Pourquoi isoler les flux ?}
+\end{frame}
+
+\begin{frame}{Matériels SAVOIE}
+\begin{block}{Quatre ESX}
 \begin{itemize}
-    \item Préconisation de l'ANSSI
-    \item Allocation de ressources indépendantes et dédiées.
+\item DELL R440 Intel Xeon E5 2.4GHz
+\item 32GB de RAM 
+\item 2 disques durs de 600GB en RAID 1 (miroir)
+\item 4x1 GB Ethernet et une carte 4 ports 1 GB additionnelle
 \end{itemize}
 \end{block}
-\begin{exampleblock}{Exemple}
-Un VLAN GESTION a besoin de beaucoup moins de ressources qu'un VLAN STOCKAGE
-\end{exampleblock}
+\begin{block}{Deux SAN}
+\begin{itemize}
+\item Synology RS818RP+
+\item 4 disques durs Seagate Barracuda 6 To
+\item Alimentation redondée
+\item 4x1 GB Ethernet
+\end{itemize}
+\end{block}
 \end{frame}
-
-\begin{frame}{Vu de l'ESX}
-\includegraphics[width=300px]{Schemas/VLAN.png}
-\end{frame}
-
-%%%%% A faire
-%\begin{frame}{Vu du SAN}
-%\includegraphics[width=300px]{VLAN.png}
-%\end{frame}
-
 
 
 \begin{center}
@@ -111,72 +115,102 @@ Un VLAN GESTION a besoin de beaucoup moins de ressources qu'un VLAN STOCKAGE
 \end{frame}
 \end{center}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{La virtualisation}
+
+\begin{center}
+\begin{frame}{La virtualisation}
+\includegraphics[width=300px]{Schemas/Virtua.jpg}
+\end{frame}
+\end{center}
+
+\begin{frame}{Pourquoi virtualiser ? 1/2}
+    \begin{block} {Rationalisation des équipements}
+        \begin{itemize}
+            \item Ratio machines/applications augmente => gain de performances, gain financier, gain écologique \pause
+            \item Coimplantation de plusieurs applications avec des socles non compatibles (ou plusieurs versions d’un même applicatif) Ex : OASIS/ORFEO \pause
+            \item Meilleure allocation des ressources en fonction des applicatifs (politique d'allocation plus fine, dynamique, sélective, etc) \pause
+            \item Facilité de déploiement dans le cadre du devops \pause
+            \item Backup, restore, snapshots facilités puisque une VM = des fichiers \pause
+        \end{itemize}
+    \end{block}
+\end{frame}
+        
+    \begin{frame}{Pourquoi virtualiser ? 2/2}
+        \begin{block} {Harmonisation et mutualisation des services}
+        \begin{itemize}
+        \item Les applicatifs s’abonnent aux services offerts dans le catalogue (base de données, apache, service de notifications, serveurs de log, serveur de dashboard/monitoring) \pause
+        \item Déclinaison locale de la solution nationale ATMOS
+        \end{itemize}
+    \end{block}
+    \end{frame}
+        
+\begin{frame}{Choix de l'hyperviseur VMware}
+\begin{block}{Avantages}
+\begin{itemize}
+\item Leader du marché, gage de pérennité et de solidité \pause
+\item Facilité pour trouver un prestataire de formation \pause
+\item Solution complète au-delà de vSphere et vCenter (vCloud, vRealize, API SVG, etc) \pause
+\item Régularité et réactivité au niveau des patchs et solutions de sécurité \pause
+\item Interfaces graphiques conviviales et puissantes (Clickodrome) \pause
+\item Expérience de Clément au travers de sa QTS et des ESX-TLC \pause
+\end{itemize}
+\end{block}
+\begin{block}{Inconvénients}
+\begin{itemize}
+\item Coût financier important à rentabiliser \pause
+\begin{itemize}
+    \item Dès lors que le nombre d’applications hébergées est important \pause
+\item Dès lors que le choix des licences est judicieux \pause
+\end{itemize}
+\item Coût RH important rentabilisé dès lors qu’on arrête d’installer N services identiques pour N projets 
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Intelligence névralgique : vCenter}
+\begin{block}{La VM vCenter}
+\begin{itemize}
+\item Interface Web permettant de gérer un inventaire d’objets VMware de manière homogène et conviviale
+\item Le vCenter est lui-même une VM que l’on déploie sur un ESX. On peut donc lui appliquer les mécanismes de HA de VMWare (vMotion, HA, FT)
+\item Le vCenter permet de déployer de manière optimale les patchs de sécurité sur chaque ESX et sur vCenter lui-même
+\item Nécessité de sauvegarder la configuration d’un vCenter de plus en plus critique
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Qu'est ce qu'une VM ?}
+\begin{block}{Une VM est un ensemble de fichiers}
+\begin{itemize}
+\item \textbf{.VMDK} : Disque dur virtuel VMware. \pause
+\item \textbf{.VMX }: Fichier de configuration de la machine virtuelle. Contient toutes les informations que vous paramétrez via l’interface graphique du logiciel. Exemples : nom de la machine, type d’OS, RAM, carte réseau, type de connexion,… \pause
+\item \textbf{.VWSP} : Fichier d’échange (correspond au SWAP). \pause
+\item \textbf{.VMSS} : Fichier qui enregistre l’état de la VM lorsqu’elle est suspendue (ce qui permet la reprise par la suite). \pause
+\item \textbf{.NVRAM} : Fichier correspondant au BIOS de la VM   \pause
+\item \textbf{.VMSN} : Contient l'état de la machine quand vous faite un snapshot (en créant un fichier par snapshot). \pause
+\item \textbf{.LOG} : Enregistre les logs sur ce qu'il se passe sur la VM. 
+\end{itemize}
+\end{block} 
+\end{frame}
+
+%\begin{frame}{Schéma plus exhaustif}
+%\begin{center}
+%\includegraphics[width=230px]{Schemas/filevm.png}   
+%\end{center}
+%\end{frame}
+
+\subsection{Stockage}
+\include{Stockage}
+
+\subsection{Réseaux virtuels}
+\include{Reseaux}
+
+\subsection{Les fonctionnalités VMware}
+\include{FctVMWare}
+
 \section{Maintenance Opérationnelle}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Qui assure la MO de ATM2 et SAVOIE ?}
-\begin{block}{Une MO répartie sur deux superviseurs}
-\begin{itemize}
-\item Les superviseurs RVU (resp CAW) utilisent leur casquette ODR (resp WAN) pour superviser le réseau ATM2
-\item Les superviseurs RVU (resp CAW) utilisent leur casquette ODA (resp CAU) pour superviser SAVOIE
-\end{itemize}
-\end{block}
-\begin{alertblock}{Attention}
-\begin{itemize}
-    \item Le réseau ATM2 n'est pas supervisé par la MO en 2018
-    \item Il est supervisé par la MS ODR et WAN conjointement 
-\end{itemize}
-\end{alertblock}
-\end{frame}
+\include{MO}
 
-\begin{frame}{Que doit faire le superviseur ?}
-\begin{block}{Processus en trois temps}
-\begin{itemize}
-\item Identifier
-\item Communiquer
-\item Agir
-\end{itemize}
-\end{block}
-\begin{block}{Outils à la disposition des superviseurs}
-\begin{itemize}
-\item La station d'administration LATANIA
-\item La supervision (??)
-\item SIAM 
-\end{itemize}
-\end{block}
-\end{frame}
-
-\begin{frame}{Identifier et Communiquer}
-\begin{block}{Identifier l'incident}
-\begin{itemize}
-\item Identifier une panne de composants réseaux (switch) ou applicatifs (ESX, disque, etc)
-\item Identifier un vMotion réalisé par vSphere (??)
-\end{itemize}
-\end{block}
-\begin{block}{Communiquer}
-\begin{itemize}
-\item Aux utilisateurs et à la MS l'impact et le temps de rétablissement
-\end{itemize}
-\end{block}
-\end{frame}
-
-\begin{frame}{Agir}
-\begin{block}{Agir sur une VM}
-\begin{itemize}
-\item Arrêter/Démarrer une VM dégradée ou en panne
-\end{itemize}
-\end{block}
-\begin{block}{Agir sur les ESX}
-\begin{itemize}
-\item \textcolor{red}{Aucun changement d'ESX n'est fait par la MO}
-\end{itemize}
-\end{block}
-\begin{block}{Agir sur les SAN}
-\begin{itemize}
-\item \textcolor{red}{Aucun changement de disque SAN n'est fait par la MO}
-\item \textcolor{red}{Aucun changement de SAN n'est fait par la MO}
-\end{itemize}
-\end{block}
-\end{frame}
+\section{Partie pratique}
+\include{Pratique}
 
 \end{document}

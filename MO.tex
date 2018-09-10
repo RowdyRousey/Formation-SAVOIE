@@ -1,0 +1,67 @@
+\begin{frame}{MESO}
+\begin{block}{Une MESO progressive}
+\begin{itemize}
+\item 1er Octobre : MESO SAVOIE (sans applicatifs)
+\item 1er Novembre : MESO WikiFF sur positions et CDS via ATM2/SAVOIE
+\end{itemize}
+\end{block}
+\begin{block}{Une MO répartie sur deux superviseurs}
+\begin{itemize}
+\item Les superviseurs RVU (resp CAW) utilisent leur casquette ODA (resp CAU) pour superviser SAVOIE
+\item Les superviseurs RVU (resp CAW) utilisent leur casquette ODR (resp WAN) pour superviser ATM2
+\item Pour chaque applicatif tournant dans la VM, le superviseur reste inchangé. Ex : WikiFF (RVU), 4Me (CAW)
+\item Pour le début, il n'y aura qu'un SPV de formé \textit{a minima}. 
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Que doit faire le superviseur ?}
+\begin{block}{Processus en trois temps}
+\begin{itemize}
+\item Identifier
+\item Communiquer
+\item Agir
+\end{itemize}\pause
+\end{block}
+\begin{block}{Outils à la disposition des superviseurs}
+\begin{itemize}
+\item La station d'administration LATANIA
+\item Le supervision applicative (WIP)
+\item SIAM (WIP)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Identifier et Communiquer}
+\begin{block}{Identifier l'incident}
+\begin{itemize}
+\item Identifier une panne de composants (ESX, SAN, disque, etc)
+\item Identifier la "bonne santé" d'une VM (i.e savoir si le problème vient de SAVOIE ou de l'application)
+\end{itemize}\pause
+\end{block}
+\begin{block}{Communiquer}
+\begin{itemize}
+\item Aux utilisateurs l'impact et le temps de rétablissement
+\item à la MS les infos les plus pertinentes possibles pour aider à la résolution du problème
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Agir}
+\begin{block}{Agir sur une VM}
+\begin{itemize}
+\item Arrêter/Démarrer une VM dégradée ou en panne
+\end{itemize}
+\end{block}
+\begin{block}{Agir sur les ESX}
+\begin{itemize}
+\item \textcolor{red}{Aucun changement d'ESX n'est fait par la MO}
+\end{itemize}
+\end{block}
+\begin{block}{Agir sur les SAN}
+\begin{itemize}
+\item \textcolor{red}{Aucun changement de disque SAN n'est fait par la MO}
+\item \textcolor{red}{Aucun changement de SAN n'est fait par la MO}
+\end{itemize}
+\end{block}
+\end{frame}

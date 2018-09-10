@@ -1,0 +1,163 @@
+\begin{frame}{Repérer les différents équipements dans la baie SAVOIE}
+\begin{block}{En salle technique}
+    \begin{itemize}
+        \item Segment OPS et PREOPS
+        \item Les ESX
+        \item Les SAN
+    \end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Interfaces Web à disposition}
+    \begin{itemize}
+        \item Interface relative à un ESX
+        \item Interface relative au vCenter
+        \item Interface relative au SAN 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Adressage réseaux de la plateforme}
+A l'aide des interfaces Web, remplir les tableaux suivants avec les adresses IP virtuelles des ESX.
+\\
+\begin{center}
+ \begin{tabular}{|c || c | c | c | c|} 
+ \hline
+  & GESTION & vMOTION & STOCKAGE & SYSTEME \\ [0.5ex] 
+ \hline
+ valthorens &  &  & & \\ [0.5ex]
+ \hline
+ courchevel &  &  & &  \\ [0.5ex]
+ \hline
+ meribel &  &  &  &  \\ [0.5ex]
+ \hline
+ saulire &  &  &  &  \\ [0.5ex]
+ \hline
+ lachambre &  &  &  &  \\ [0.5ex]
+ \hline
+ latania  &  &  &  &  \\ [0.5ex]
+ \hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}{Exercice}
+\begin{block}{Enoncé}
+\begin{itemize}
+\item Création d'une VM \textit{\textbf{magasinier}} utilisant le datastore distant \textbf{\textit{entrepot}}
+\end{itemize}
+\end{block}
+\begin{block}{Caractéristique de la VM magasinier}
+\begin{itemize}
+\item 2 GB de RAM
+\item Utilise un OS Linux
+\item Est connecté au moins à un réseau \textbf{\textit{ligne2prod}}
+\end{itemize}
+\end{block}
+\begin{block}{Caractéristique du datastore entrepot}
+\begin{itemize}
+\item 25 Go Thin provisioning
+\item Systeme de fichiers VMFS
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Jouons un peu avec notre VM}
+\begin{block}{Etat de santé de la VM}
+\begin{itemize}
+\item Graphiques montrant la charge CPU et l'utilisation de la RAM
+\end{itemize}
+\end{block}
+\begin{block}{Test du vMotion}
+\begin{itemize}
+\item Migrer la VM magasinier sur un autre ESX. 
+\item Regarder le temps de traitement, la charge réseau sur les ESX, les logs.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{VM et datastore}
+\begin{block}{Une VM, c'est quoi déjà ?}
+\begin{itemize}
+\item Où peut-on trouver concrètement la VM magasinier sur le SAN ? 
+\item Renommer le fichier vm-magasinier.VMDK en vm-marsouin.VMDK. Que se passe-t-il ? Pourquoi ? 
+\item Renommer le fichier correctement
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Exercice}
+\begin{block}{Enoncé}
+\begin{itemize}
+\item Dans la VM, créer sur le bureau un fichier texte nommé "Marseille" et y inscrire dedans une phrase quelconque.
+\item Voyons comment faire un snapshot de la VM (expliquer ce qu'est un snapshot rapidement)
+\item Regardons dans le datastore entrepôt le fichier créé
+\item Simuler une erreur d'un agent en détruisant le fichier Marseille.
+\item Utiliser la gestion des snapshots pour revenir à l'état initial de la VM et ainsi s'apercevoir que l'erreur a été corrigée.
+\end{itemize}
+\end{block}
+\begin{alertblock}{Attention}
+\begin{itemize}
+\item L'utilisation des snapshots n'est pas une méthode de sauvegarde de VM
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Cas de pannes : ESX}
+\begin{block}{ESX}
+\begin{itemize}
+\item Eteindre proprement l'ESX sur lequel tourne la VM magasinier. Que se passe-t-il ?
+\item Regardons les logs
+\item Redémarrer proprement l'ESX et attendre la remise en conformité de la plate-forme
+\end{itemize}
+\end{block}
+
+\begin{block}{Cas de pannes : ESX ft vMotion}
+\begin{itemize}
+\item Créer un cluster et y inclure la VM Magasinier
+\item Eteindre proprement l'ESX sur lequel tourne la VM magasinier. Que se passe-t-il ?
+\item Regardons les logs
+\item Redémarrer proprement l'ESX et attendre la remise en conformité de la plate-forme
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Cas de pannes 2}
+\begin{block}{Cas de pannes : SAN}
+\begin{itemize}
+\item Eteindre proprement le SAN maître. Que se passe-t-il dans la VM ?
+\item Si on ne dispose que d'un SAN sur la plateforme, éteindre proprement le SAN. Que se passe-t-il ?
+\item Regardons les logs
+\item Redémarrer proprement le SAN et attendre la remise en conformité de la plate-forme
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Cas de pannes 3}
+\begin{block}{Cas de pannes : Réseaux}
+\begin{itemize}
+\item Repérer une NIC relative au VLAN STOCKAGE. La déconnecter du switch.
+\item Que se passe-t-il au niveau de la VM ?
+\end{itemize}
+\end{block}
+
+\begin{block}{Cas de pannes : Réseaux}
+\begin{itemize}
+\item Réperer une NIC relative au VLAN vMotion. La déconnecter du switch.
+\item Que se passe-t-il au niveau de la VM ? 
+\item Eteindre l'ESX hébergeant la VM magasinier. Que devrait-il se passer ? Que se passe-t-il ? Pourquoi ?
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Avant de partir ...}
+\begin{block}{Remise en conformité de la plateforme}
+\begin{itemize}
+\item Supprimer la VM magasinier du datastore
+\item Supprimer le cluster
+\item Supprimer les réseaux créés
+\item Supprimer toutes les modifications que l'on a apportées sur les SAN
+\item Vérifier que les ESX et les SAN sont allumés
+\item Vérifier les branchements réseaux
+\end{itemize}
+\end{block}
+\end{frame}
